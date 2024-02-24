@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>hello</h1>
     <GoogleMap :api-key="my_key" style="width: 100%; height: 500px" :center="center" :zoom="15" @click = handleMapClick>
       <Marker :options="{ position: center }" />
+      <Marker v-if="clickedLocation" :options="{ position: clickedLocation }" />
     </GoogleMap>
   </div>
 </template>
@@ -21,6 +21,7 @@ export default defineComponent({
   data(){
     return {
       center : {lat: 40.689247, lng: -74.044502 },
+      clickedLocation : null
     }
   },
   methods: {
@@ -34,7 +35,7 @@ export default defineComponent({
       this.center = {lat: position.coords.latitude, lng: position.coords.longitude}
     },
     handleMapClick(event){
-      console.log("got here" + event)
+      this.clickedLocation = {lat: event.latLng.lat(), lng : event.latLng.lng()}
     }
   },
   mounted() {
