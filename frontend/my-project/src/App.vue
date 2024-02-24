@@ -5,6 +5,9 @@ import InteractiveMap from './components/InteractiveMap.vue'
 
 <template>
   <InteractiveMap/>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 

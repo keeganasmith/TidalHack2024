@@ -4,9 +4,9 @@
 
 <script>
 import { defineComponent } from "vue";
-import { GoogleMap, Marker } from "vue3-google-map";
+// import { GoogleMap, Marker } from "vue3-google-map";
 export default defineComponent({
-    components: { GoogleMap, Marker },
+    // components: { GoogleMap, Marker },
     props: { routes : Array},
     setup() {
         //const center = { lat: 40.689247, lng: -74.044502 };

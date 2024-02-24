@@ -12,13 +12,15 @@
 <script>
 import { defineComponent } from "vue";
 import { GoogleMap, Marker } from "vue3-google-map";
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   components: { GoogleMap, Marker },
   setup() {
     //const center = { lat: 40.689247, lng: -74.044502 };
+    const router = useRouter();
     const my_key = process.env.VUE_APP_GOOGLE_MAPS_API_KEY
-    return { my_key };
+    return { my_key, router };
   },
   data(){
     return {
@@ -48,6 +50,7 @@ export default defineComponent({
       } else {
       console.log("No destination selected");
       }
+      this.router.push({ name: 'RoutesPage' });
     }
   },
 
