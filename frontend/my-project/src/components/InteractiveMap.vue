@@ -4,7 +4,7 @@
       <Marker :options="{ position: center }" />
       <Marker v-if="clickedLocation" :options="{ position: clickedLocation }" />
     </GoogleMap>
-    <button @click="HandleClick">Click Me!</button>
+    <button @click="handleButtonClick">Click Me!</button>
   </div>
 </template>
 
@@ -38,10 +38,19 @@ export default defineComponent({
     },
     handleMapClick(event){
       this.clickedLocation = {lat: event.latLng.lat(), lng : event.latLng.lng()}
-      console.log("got here" + event)
-      alert('Button clicked!');
+      // console.log("got here" + event)
+      console.log("Map clicked at: " + event.latLng.lat() + ", " + event.latLng.lng());
+    },
+      handleButtonClick() {
+      console.log("User current location: Latitude = " + this.center.lat + ", Longitude = " + this.center.lng);
+      if (this.clickedLocation) {
+      console.log("Destination location: Latitude = " + this.clickedLocation.lat + ", Longitude = " + this.clickedLocation.lng);
+      } else {
+      console.log("No destination selected");
+      }
     }
   },
+
   mounted() {
     this.getLocation();
   }
