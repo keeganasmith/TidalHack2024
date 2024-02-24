@@ -12,34 +12,36 @@ lock = Lock()
 def get_points_batch(i: int):
     export_dict = {}
     for n in range(10):
-        points = {}
+        points = []
         for j in range(i * 1000 + n * 100, i * 1000 + n * 100 + 100):
             if j >= df.shape[0]:
                 break
-            if (df.iloc[j].Start_Lat, df.iloc[j].Start_Lng) in points:
-                points[(df.iloc[j].Start_Lat, df.iloc[j].Start_Lng)].append(df.iloc[j].Severity)
-            else:
-                points[(df.iloc[j].Start_Lat, df.iloc[j].Start_Lng)] = [df.iloc[j].Severity]
-
+            points.append((df.iloc[j].Start_Lat, df.iloc[j].Start_Lng, df.iloc[j].Severity))
         if len(points) == 0:
             break
 
-        path = '%7C'.join([f"{lat}%2C{points[i][1]}" for i in range(len(points))])
-        url = f"https://roads.googleapis.com/v1/snapToRoads?interpolate=true&path={path}&key={api_key}"
+        path = '%7C'.join([f"{points[i][0]}%2C{points[i][1]}" for i in range(len(points))])
+        url = f"https://roads.googleapis.com/v1/nearestRoads?points={path}&key={api_key}"
         headers = {'Accept': 'application/json'}
 
         response = requests.get(url=url, headers=headers)
         places = response.json()['snappedPoints']
-        breakpoint()
-        for place in places:
-            if place['placeId'] in export_dict:
-                export_dict[place['placeId']] += sum([i ** 0.5 for i in points[(place['Latitude'], place['Longitude'])]])
+        if len(places) < len(points):
+            continue
+        originalIndices = set()
+        for k in range(len(places)):
+            if places[k]['originalIndex'] in originalIndices:
+                continue
             else:
-                export_dict[place['placeId']] = sum([i ** 0.5 for i in points[(place['Latitude'], place['Longitude'])]])
+                originalIndices.add(places[k]['originalIndex'])
+            if places[k]['placeId'] in export_dict:
+                export_dict[places[k]['placeId']] += points[places[k]['originalIndex']][2] ** 0.5
+            else:
+                export_dict[places[k]['placeId']] = points[places[k]['originalIndex']][2] ** 0.5
 
     lock.acquire()
     batches.append(export_dict)
-    print(i)
+    # print(i)
     lock.release()
 
 threads = []
