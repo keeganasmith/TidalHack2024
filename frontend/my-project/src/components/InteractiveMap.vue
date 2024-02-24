@@ -4,8 +4,10 @@
       <Marker :options="{ position: center }" />
       <Marker v-if="clickedLocation" :options="{ position: clickedLocation }" />
     </GoogleMap>
+    <button @click="HandleClick">Click Me!</button>
   </div>
 </template>
+
 
 <script>
 import { defineComponent } from "vue";
@@ -36,6 +38,8 @@ export default defineComponent({
     },
     handleMapClick(event){
       this.clickedLocation = {lat: event.latLng.lat(), lng : event.latLng.lng()}
+      console.log("got here" + event)
+      alert('Button clicked!');
     }
   },
   mounted() {
@@ -45,5 +49,12 @@ export default defineComponent({
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+button {
+  background-color: #42b983;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
 
 </style>
