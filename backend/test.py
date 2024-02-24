@@ -1,43 +1,42 @@
 import requests
+import json
+import polyline
+from collections import Counter
 
-url = 'https://routes.googleapis.com/directions/v2:computeRoutes'
-api_key = 'YOUR_API_KEY'
+api_key = 'AIzaSyDt14tmG4wv0zqJ6rTYBlPftB0w4VzwSgY'
+url = f"https://routes.googleapis.com/directions/v2:computeRoutes?key={api_key}"
+headers = {'Accept': 'application/json', 'X-Goog-FieldMask': 'routes.polyline.encodedPolyline'}
 
-headers = {
-    'Content-Type': 'application/json',
-    'X-Goog-Api-Key': api_key,
-    'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline'
+cstat_latlng = {"latitude": 30.627977, "longitude": -96.334404}
+dallas_latlng = {"latitude": 32.776665, "longitude": -96.796989}
+
+cstat_location = {"latLng": cstat_latlng, "heading": 0}
+dallas_location = {"latLng": dallas_latlng, "heading": 0}
+
+cstat_waypoint = {"via": False, "vehicleStopover": False, "sideOfRoad": False, "location": cstat_location}
+dallas_waypoint = {"via": False, "vehicleStopover": False, "sideOfRoad": False, "location": dallas_location}
+
+request = {
+    "origin": cstat_waypoint,
+    "destination": dallas_waypoint,
+    "intermediates": [],
+    "travelMode": "DRIVE",
+    "computeAlternativeRoutes": True,
 }
 
-data = {
-  "origin":{
-    "location":{
-      "latLng":{
-        "latitude": 37.419734,
-        "longitude": -122.0827784
-      }
-    }
-  },
-  "destination":{
-    "location":{
-      "latLng":{
-        "latitude": 37.417670,
-        "longitude": -122.079595
-      }
-    }
-  },
-  "travelMode": "DRIVE",
-  "routingPreference": "TRAFFIC_AWARE",
-  "departureTime": "2023-10-15T15:01:23.045123456Z",
-  "computeAlternativeRoutes": False,
-  "routeModifiers": {
-    "avoidTolls": False,
-    "avoidHighways": False,
-    "avoidFerries": False
-  },
-  "languageCode": "en-US",
-  "units": "IMPERIAL"
-}
+request = json.dumps(request)
 
-response = requests.post(url, json=data, headers=headers)
-print(response.json())
+response = requests.post(url=url, data=request, headers=headers)
+
+route = polyline.decode(response.json()['routes'][0]['polyline']['encodedPolyline'])
+places = []
+
+for i in range(len(route) // 100):
+    path = '%7C'.join([f"{lat}%2C{long}" for lat, long in route[i * 100:i * 100 + 100]])
+    url = f"https://roads.googleapis.com/v1/snapToRoads?interpolate=true&path={path}&key={api_key}"
+    headers = {'Accept': 'application/json'}
+
+    response = requests.get(url=url, headers=headers)
+    for place in response.json()['snappedPoints']:
+        places.append(place['placeId'])
+    
