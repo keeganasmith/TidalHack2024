@@ -4,8 +4,10 @@
     <GoogleMap :api-key="my_key" style="width: 100%; height: 500px" :center="center" :zoom="15" @click = handleMapClick>
       <Marker :options="{ position: center }" />
     </GoogleMap>
+    <button @click="HandleClick">Click Me!</button>
   </div>
 </template>
+
 
 <script>
 import { defineComponent } from "vue";
@@ -35,6 +37,7 @@ export default defineComponent({
     },
     handleMapClick(event){
       console.log("got here" + event)
+      alert('Button clicked!');
     }
   },
   mounted() {
@@ -44,5 +47,12 @@ export default defineComponent({
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+button {
+  background-color: #42b983;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
 
 </style>
