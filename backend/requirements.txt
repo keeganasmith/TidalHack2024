@@ -4,3 +4,4 @@ pandas
 pyodbc
 xgboost
 scikit-learn
+gunicorn
