@@ -10,7 +10,7 @@ api_key = 'AIzaSyBgKOoB2j5OFR2CmvmYLlT2Llobhr42ojk'
 
 data = {}
 new_data = {}
-with open("backend/test_road_segs.json", "r") as f:
+with open("../test_road_segs.json", "r") as f:
     data = json.loads(f.read())
 data_segs = [i for i in data]
 
@@ -18,20 +18,12 @@ lock = Lock()
 
 def process_places(i: int):
     seg = (len(data_segs) // 600)
+    print(seg)
     for j in range(i * seg, i * seg + seg):
         if j >= len(data_segs):
             break
         road_seg = data_segs[j]
-        print(road_seg)
-        headers = {'Accept': 'application/json', 'X-Goog-Api-Key': api_key}
-        # breakpoint()
-        print(response.json())
-        location = response.json()['location']
-        lat, lng = location['latitude'], location['longitude']
-
-        url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={api_key}"
-
-        response = requests.get(url=url, headers=headers)
+        lat, lng = (data[road_seg][1], data[road_seg][2])
 
         # address_components = response.json()['results'][0]['address_components']
         # state = ""
@@ -39,27 +31,38 @@ def process_places(i: int):
         #     if component['types'][0] == 'administrative_area_level_1':
         #         state = component['short_name']
 
-        viewport = response.json()['results'][0]['geometry']['viewport']
-        size = geopy.distance.geodesic((viewport['northeast']['lat'], viewport['northeast']['lng']), (viewport['southwest']['lat'], viewport['southwest']['lng'])).mi
-        
-        # api = overpy.Overpass()
-        # result = api.query(f"""way(around:{500},{lat},{lng}) ["maxspeed"];(._;>;);out body;""")
-        # sum_speed_limit = 0
-        # for way in result.ways:
-        #     sum_speed_limit += int(way.tags.get("maxspeed", "n/a").split()[0])
-        # if not len(result.ways):
-        #     continue
-        # avg_speed_limit = sum_speed_limit / len(result.ways)
+        # viewport = response.json()['results'][0]['geometry']['viewport']
+        # size = geopy.distance.geodesic((viewport['northeast']['lat'], viewport['northeast']['lng']), (viewport['southwest']['lat'], viewport['southwest']['lng'])).mi
+        okay = False
+        while not okay:
+            try:
+                api = overpy.Overpass()
+                result = api.query(f"""way(around:{500},{lat},{lng}) ["maxspeed"];(._;>;);out body;""")
+                okay = True
+            except Exception:
+                print("RETRY")
+                sleep(10)
+
+        print("DONE")
+        sum_speed_limit = 0
+        for way in result.ways:
+            speed = way.tags.get("maxspeed", "n/a").split("m")[0].strip()
+            if speed == 'none':
+                continue
+            sum_speed_limit += float(speed)
+        if not len(result.ways):
+            continue
+        avg_speed_limit = sum_speed_limit / len(result.ways)
         
         lock.acquire()
-        new_data[road_seg] = data[road_seg] / size
+        new_data[road_seg] = (data[road_seg][0], data[road_seg][1], data[road_seg][2], avg_speed_limit)
         lock.release()
         sleep(1.2)
     
     print(i)
     
 threads = []
-for i in range(600):
+for i in range(60):
     thread = Thread(target=process_places, args=[i])
     thread.start()
 
