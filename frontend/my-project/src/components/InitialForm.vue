@@ -1,17 +1,19 @@
 <script setup>
     import { ref } from 'vue'
     import { useRouter } from 'vue-router';
-    let result = {"Size_Class" : "","Curb_Wgt": 0.0,"ABS" : false,"Airbag_Front" : false,"SSF" : 0.0,"Drive":false,"Drive4":false,"TireSize":0.0,"StabilityControl":false,
+    let result = {"Size_Class" : "","Curb_Wgt": 0.0,"ABS" : false,"Airbag_D" : false,"SSF" : 0.0,"Drive":"RWD","TireSize":0.0,"StabilityControl":false,
     "BrakeAssist":false,"TractionControl":false,"AdjUpperBeltFront":false,"AdjUpperBeltRear":false,"Pretensioner":false,"IntegratedSeat":false,"RearCtrLapShldrBelt":false,
     "AdvanceAirbagFeature":false,"SideAirbag":false,"HeadAirbag":false,"HeadAirbagRollover":false,
-    "RearSeatHeadRestraint":false,"DynamicHeadRestraint":false,"BuiltInChildSeat":false,"Roll_Stability": false,"SafetyPowerWindows": false,"WheelsDriven":0}
-    let check_box_options = ["ABS","Airbag_Front","StabilityControl","BrakeAssist","TractionControl","AdjUpperBeltFront","AdjUpperBeltRear","Pretensioner","IntegratedSeat",
+    "RearSeatHeadRestraint":false,"DynamicHeadRestraint":false,"Roll_Stability": false,"SafetyPowerWindows": false,"WheelsDriven":0}
+    let check_box_options = ["ABS","Airbag_D","StabilityControl","BrakeAssist","TractionControl","AdjUpperBeltFront","AdjUpperBeltRear","Pretensioner","IntegratedSeat",
     "RearCtrLapShldrBelt","AdvanceAirbagFeature","SideAirbag","HeadAirbag","HeadAirbagRollover",
-    "RearSeatHeadRestraint","DynamicHeadRestraint","BuiltInChildSeat","Roll_Stability","SafetyPowerWindows"]
+    "RearSeatHeadRestraint","DynamicHeadRestraint","Roll_Stability","SafetyPowerWindows"]
     const check_box_labels = ["Has ABS", "Has front airbags", "Has stability control - ESC", "Has brake assist", "Has traction control", "Has adjustable upperbelt - front",
     "Has Adjustable upperbelt - rear", "Has pretensioner", "Has integrated safety belt system", "Has rear center lap/shoulder belts", "Has advanced frontal airbag feature", "Has side airbag", 
-    "Has head airbag", "Has rear seat head restraint", "Has dynamic head restraint", "Has builtin child seat", "Has roll stability control", "Has safety power windows"]
-    const class_options =["Sport Utility Vehicle", "Compact Passenger Car"] 
+    "Has head airbag", "Has rear seat head restraint", "Has dynamic head restraint", "Has roll stability control", "Has safety power windows"]
+    const class_options =["Sport Utility Vehicle", 'Compact Passenger Car', 'Pickup', 'Van',
+ 'Medium Passenger Car', 'Heavy Passenger Car' ,'Light Passenger Car',
+ 'Mini Passenger Car']
     const drive_options = ["4X2 FWD", "4X2 RWD", "4X4 4WD", "4X4 AWD"]
     const router = useRouter();
     const check_box_value = ref([])
@@ -37,19 +39,19 @@
         delete result["Drive_type"]
         if(drive_option === "4X2 FWD"){
             result["Drive"] = "FWD"
-            result["Drive4"] = ""
+            result["WheelsDriven"] = "FWD"
         }
         else if(drive_option === "4X2 RWD"){
             result["Drive"] = "RWD"
-            result["Drive4"] = ""
+            result["WheelsDriven"] = "RWD"
         }
         else if(drive_option === "4X4 4WD"){
-            result["Drive"] = ""
-            result["Drive4"] = "4WD"
+            result["Drive"] = "4WD"
+            result["WheelsDriven"] = "4WD"
         }
         else{
-            result["Drive"] = ""
-            result["Drive4"] = "AWD"
+            result["Drive"] = "AWD"
+            result["WheelsDriven"] = "AWD"
         }
         sessionStorage.setItem('submissionInfo', JSON.stringify(result));
         router.push({
@@ -93,14 +95,9 @@
     />
     <FormKit
       name="TireSize"
-      label="Please enter the size of the tires:"
+      label="Please enter the diameter of the tires in inches:"
       type="number"
       step="0.01"
-    />
-    <FormKit
-      name="WheelsDriven"
-      label="Please enter the number of wheels driven:"
-      type="number"
     />
     <FormKit
         name="Drive_type"
