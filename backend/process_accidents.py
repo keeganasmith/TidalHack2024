@@ -3,8 +3,8 @@ import requests
 import json
 from threading import Thread, Lock
 
-api_key = 'AIzaSyDt14tmG4wv0zqJ6rTYBlPftB0w4VzwSgY'
-df = pd.read_csv("test_accidents.csv")
+api_key = 'AIzaSyBgKOoB2j5OFR2CmvmYLlT2Llobhr42ojk'
+df = pd.read_csv("backend/test_accidents.csv")
 
 batches = []
 lock = Lock()

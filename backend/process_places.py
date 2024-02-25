@@ -6,11 +6,11 @@ import geopy.distance
 from threading import Thread, Lock
 from time import sleep
 
-api_key = 'AIzaSyDt14tmG4wv0zqJ6rTYBlPftB0w4VzwSgY'
+api_key = 'AIzaSyBgKOoB2j5OFR2CmvmYLlT2Llobhr42ojk'
 
 data = {}
 new_data = {}
-with open("test_road_segs.json", "r") as f:
+with open("backend/test_road_segs.json", "r") as f:
     data = json.loads(f.read())
 data_segs = [i for i in data]
 
@@ -26,6 +26,7 @@ def process_places(i: int):
         headers = {'Accept': 'application/json', 'X-Goog-Api-Key': api_key}
         # breakpoint()
         print(response.json())
+        location = response.json()['location']
         lat, lng = location['latitude'], location['longitude']
 
         url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={api_key}"
