@@ -8,7 +8,10 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import RandomizedSearchCV
 # Assuming `df` is your DataFrame
-filename = "../cleaned_features_NHTSACar.csv"
+filename = "./backend/cleaned_features_NHTSACar.csv"
+server = True
+if(not server):
+    filename = "../cleaned_features_NHTSACar.csv"
 df = pd.read_csv(filename, encoding="unicode_escape")
 categorical_columns = ['Size_Class', 'Drive', 'WheelsDriven', "ABS","Airbag_D","StabilityControl","BrakeAssist","TractionControl","AdjUpperBeltFront","AdjUpperBeltRear","Pretensioner","IntegratedSeat",
     "RearCtrLapShldrBelt","AdvanceAirbagFeature","SideAirbag","HeadAirbag","HeadAirbagRollover",
