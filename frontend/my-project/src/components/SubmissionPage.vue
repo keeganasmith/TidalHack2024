@@ -41,10 +41,10 @@ onMounted(fetchScore);
         </div>
         <div v-else>
             <ul>
-                <li>Frontal Impact Driver Star rating: {{ drstar }}</li>
-                <li>Frontal Impact Passenger Star rating: {{ pastar }}</li>
-                <li>Side Impact Rear Seat Driver Star rating: {{ drsstar }}</li>
-                <li>Side Impact Rear Seat Passenger Star rating: {{ passtar }}</li>
+                <li>Frontal Impact Driver Star rating: {{ drstar }} / 5</li>
+                <li>Frontal Impact Passenger Star rating: {{ pastar }} / 5</li>
+                <li>Side Impact Rear Seat Driver Star rating: {{ drsstar }} / 5</li>
+                <li>Side Impact Rear Seat Passenger Star rating: {{ passtar }} / 5</li>
             </ul>
         </div>
     </div>
