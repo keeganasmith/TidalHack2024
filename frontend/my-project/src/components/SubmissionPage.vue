@@ -4,7 +4,10 @@ import { ref, onMounted } from 'vue';
 let endpoint = "http://localhost:5000/get_score";
 let isLoading = ref(true);
 let score = ref(null); 
-
+let drstar = ref(null);
+let drsstar = ref(null);
+let pastar = ref(null);
+let passtar = ref(null);
 async function fetchScore() {
     let joe = sessionStorage.getItem('submissionInfo');
     try {
@@ -17,6 +20,10 @@ async function fetchScore() {
         });
         const data = await response.json(); 
         score.value = data; 
+        drstar.value = data["DrStar_Num"][0] + 1
+        drsstar.value = data["DrSSTar_Num"][0] + 1
+        pastar.value = data["PaStar_Num"][0] + 1
+        passtar.value = data["PaSStar_Num"][0] + 1
     } catch (error) {
         console.error('Error fetching score:', error);
     } finally {
@@ -33,7 +40,12 @@ onMounted(fetchScore);
             Loading...
         </div>
         <div v-else>
-            <p>{{ score }}</p>
+            <ul>
+                <li>Frontal Impact Driver Star rating: {{ drstar }}</li>
+                <li>Frontal Impact Passenger Star rating: {{ pastar }}</li>
+                <li>Side Impact Rear Seat Driver Star rating: {{ drsstar }}</li>
+                <li>Side Impact Rear Seat Passenger Star rating: {{ passtar }}</li>
+            </ul>
         </div>
     </div>
 </template>
