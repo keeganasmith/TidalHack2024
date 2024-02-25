@@ -1,10 +1,9 @@
 <script setup>
-import InteractiveMap from './components/InteractiveMap.vue'
 
 </script>
 
 <template>
-  <InteractiveMap/>
+  <router-view></router-view>
 </template>
 
 
