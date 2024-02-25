@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-let endpoint = "http://localhost:5000/get_score";
+let endpoint = "https://tidalhack2024.onrender.com/get_score";
 let isLoading = ref(true);
 let score = ref(null); 
 let drstar = ref(null);
