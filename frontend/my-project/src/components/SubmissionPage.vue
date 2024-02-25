@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 let endpoint = "https://tidalhack2024.onrender.com/get_score";
 let isLoading = ref(true);
@@ -8,6 +10,11 @@ let drstar = ref(null);
 let drsstar = ref(null);
 let pastar = ref(null);
 let passtar = ref(null);
+function handleBack(){
+    router.push({
+        name: 'initialForm' // Name of the route
+    });
+}
 async function fetchScore() {
     let joe = sessionStorage.getItem('submissionInfo');
     try {
@@ -34,17 +41,22 @@ onMounted(fetchScore);
 </script>
 
 <template>
-    <div>
-        <h3>You Submitted:</h3>
-        <div v-if="isLoading">
+    <div style="color: black; padding: 20px;">
+        <button 
+            @click="handleBack" 
+            style="background-color: green; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px;">
+            Back
+        </button>
+        <div v-if="isLoading" style="color: green; font-weight: bold;">
             Loading...
         </div>
         <div v-else>
+            <h3 style="color: green;">Predicted Crash Test Ratings</h3>
             <ul>
-                <li>Frontal Impact Driver Star rating: {{ drstar }} / 5</li>
-                <li>Frontal Impact Passenger Star rating: {{ pastar }} / 5</li>
-                <li>Side Impact Rear Seat Driver Star rating: {{ drsstar }} / 5</li>
-                <li>Side Impact Rear Seat Passenger Star rating: {{ passtar }} / 5</li>
+                <li style="margin-bottom: 10px;">Frontal Impact Driver Star rating: <span style="font-weight: bold;">{{ drstar }} / 5</span></li>
+                <li style="margin-bottom: 10px;">Frontal Impact Passenger Star rating: <span style="font-weight: bold;">{{ pastar }} / 5</span></li>
+                <li style="margin-bottom: 10px;">Side Impact Rear Seat Driver Star rating: <span style="font-weight: bold;">{{ drsstar }} / 5</span></li>
+                <li style="margin-bottom: 10px;">Side Impact Rear Seat Passenger Star rating: <span style="font-weight: bold;">{{ passtar }} / 5</span></li>
             </ul>
         </div>
     </div>

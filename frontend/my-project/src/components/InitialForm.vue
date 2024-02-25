@@ -63,48 +63,67 @@
 
 
 <template>
-    <FormKit 
-    type="form"
-    @submit="handleSubmit"
-    >
-    <FormKit
-        name="ignore"
-        v-model="check_box_value"
-        type="checkbox"
-        label="Safety features"
-        :options="check_box_labels"
-    />
-    <FormKit
-        name="Size_Class"
-
-        type="select"
-        label="Choose a vehicle class:"
-        :options="class_options"
-    />
-    <FormKit
-      name="Curb_Wgt"
-      label="Enter the curb weight of the vehicle (lbs):"
-      type="number"
-      step="0.01"
-    />
-    <FormKit
-      name="SSF"
-      label="Please enter the static stability factor:"
-      type="number"
-      step="0.01"
-    />
-    <FormKit
-      name="TireSize"
-      label="Please enter the diameter of the tires in inches:"
-      type="number"
-      step="0.01"
-    />
-    <FormKit
-        name="Drive_type"
-
-        type="select"
-        label="Choose a drive type:"
-        :options="drive_options"
-    />
-    </FormKit>
-</template>
+    <div style="background-color: white; color: black; padding: 20px;">
+      <h3 style="color: green;">Please enter the characteristics of the vehicle you would like to test</h3>
+      <FormKit
+        type="form"
+        @submit="handleSubmit"
+        style="border: 2px solid green; padding: 20px; border-radius: 10px;"
+      >
+        <FormKit
+          name="ignore"
+          v-model="check_box_value"
+          type="checkbox"
+          label="Safety features"
+          :options="check_box_labels"
+          label-class="form-label"
+        />
+        <FormKit
+          name="Size_Class"
+          type="select"
+          label="Choose a vehicle class:"
+          :options="class_options"
+          label-class="form-label"
+        />
+        <FormKit
+          name="Curb_Wgt"
+          label="Enter the curb weight of the vehicle (lbs):"
+          type="number"
+          step="0.01"
+          label-class="form-label"
+        />
+        <FormKit
+          name="SSF"
+          label="Please enter the static stability factor:"
+          type="number"
+          step="0.01"
+          label-class="form-label"
+        />
+        <FormKit
+          name="TireSize"
+          label="Please enter the diameter of the tires in inches:"
+          type="number"
+          step="0.01"
+          label-class="form-label"
+        />
+        <FormKit
+          name="Drive_type"
+          type="select"
+          label="Choose a drive type:"
+          :options="drive_options"
+          label-class="form-label"
+        />
+        <!-- Add a submit button -->
+        
+        
+      </FormKit>
+    </div>
+  </template>
+  
+  <style>
+  .form-label {
+    color: black;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  </style>
