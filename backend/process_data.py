@@ -44,7 +44,7 @@ def clean_file(filename):
     df_features['Width'] = df_features['Width'] / 25.4
 
     df_features['HeadAirbag'] = df_features['HeadAirbag'].notnull()
-    df_features['SideAirbag'] = df_features['HeadAirbag'].notnull()
+    df_features['SideAirbag'] = df_features['SideAirbag'].notnull()
 
     # Calculate sidewall height in inches
     df_features['SidewallHeight'] = (df_features['AspectRatio'] / 100) * df_features['Width']
