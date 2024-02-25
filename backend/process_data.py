@@ -24,7 +24,14 @@ def clean_file(filename):
     for feature in y_features:
         df_features[feature] = df_features[feature].fillna(-1)
         df_features[feature] = np.floor(df_features[feature]).astype(int)
-        df_features[feature] = df_features[feature].apply(lambda x: np.nan if (x == -1) else x)
+        df_features[feature] = df_features[feature].apply(lambda x: x-10 if 11 <= x <= 15 else x)
+        df_features[feature] = df_features[feature] - 1
+        df_features.loc[df_features[feature].between(5, 40), feature] = pd.NA
+
+        # Convert the column to a nullable integer type
+        df_features[feature] = df_features[feature].astype('Int64')
+        df_features[feature] = df_features[feature].replace(-1, pd.NA).astype('Int64')
+
     # df_features['BuiltInChildSeat'] = df_features['BuiltInChildSeat'].fillna('A')
     # df_features['Roll_Stability'] = df_features['Roll_Stability'].fillna('A')
     # df_features['StabilityControl'] = df_features['StabilityControl'].fillna('A')
