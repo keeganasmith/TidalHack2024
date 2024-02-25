@@ -35,13 +35,13 @@ def get_points_batch(i: int):
             else:
                 originalIndices.add(places[k]['originalIndex'])
             if places[k]['placeId'] in export_dict:
-                export_dict[places[k]['placeId']] += points[places[k]['originalIndex']][2] ** 0.5
+                export_dict[places[k]['placeId']] += [(points[places[k]['originalIndex']][2] ** 0.5, points[places[k]['originalIndex']][0], points[places[k]['originalIndex']][1])]
             else:
-                export_dict[places[k]['placeId']] = points[places[k]['originalIndex']][2] ** 0.5
+                export_dict[places[k]['placeId']] = [(points[places[k]['originalIndex']][2] ** 0.5, points[places[k]['originalIndex']][0], points[places[k]['originalIndex']][1])]
 
     lock.acquire()
     batches.append(export_dict)
-    # print(i)
+    print(i)
     lock.release()
 
 threads = []
@@ -56,10 +56,11 @@ for thread in threads:
 export_batches = {}
 for batch in batches:
     for place in batch:
+        total_severity = sum([i[0] for i in batch[place]])
         if place in export_batches:
-            export_batches[place] += batch[place]
+            export_batches[place] = (export_batches[place][0] + total_severity, batch[place][0][1], batch[place][0][2])
         else:
-            export_batches[place] = batch[place]
+            export_batches[place] = (total_severity, batch[place][0][1], batch[place][0][2])
 
 with open("test_road_segs.json", "w") as f:
     f.write(json.dumps(export_batches))
